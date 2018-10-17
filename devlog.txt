@@ -1,3 +1,10 @@
+raunakC antonD -- 2018-10-17 14:01
+- Created database fxn
+
+soojinC joanC -- 2018-10-17 14:01
+- Started creating templates
+- Started GitHub project
+
 soojinC raunakC antonD joanC -- 2018-10-17 13:34
 - We read about GitHub projects and decided to use them for better organization
 
