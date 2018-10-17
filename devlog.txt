@@ -1,3 +1,6 @@
+raunakC -- 2018-10-17 16:35
+- Completed the create_story function
+
 raunakC antonD -- 2018-10-17 14:01
 - Created database fxn
 
