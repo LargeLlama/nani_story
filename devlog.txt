@@ -1,10 +1,13 @@
-soojinC raunakC antonD joanC —- 2018-10-16 21:40
+soojinC raunakC antonD joanC -- 2018-10-17 13:34
+- We read about GitHub projects and decided to use them for better organization
+
+soojinC raunakC antonD joanC -- 2018-10-16 21:40
 - The entire team will stay in communication through Discord from start to finish
 - Code readability -- we keep code organized and readable (ie. use self-documenting code, comments, and meaningful variable names)
 - We will document and address bugs (most likely through GitHub Projects) and not continue until the bugs have been squashed
 
-soojinC raunakC antonD joanC —- 2018-10-16 14:00
+soojinC raunakC antonD joanC -- 2018-10-16 14:00
 - Modified proposal to reflect changes
 
-soojinC raunakC antonD joanC —- 2018-10-14 14:00
+soojinC raunakC antonD joanC -- 2018-10-14 14:00
 - Finished proposal
