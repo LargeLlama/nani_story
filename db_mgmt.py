@@ -37,7 +37,26 @@ def auth_user(user):
     '''
     pass
 
+def add_to_story(story, content):
+    '''
+    Finds the story that goes by title in the database
+    Adds content to the end of the story and updates last_edit
+    '''
+    db = sqlite3.connect(DB_FILE)
+    c = db.cursor()
+
+    c.execute('SELECT * FROM stories')
+
+    for entry in c:
+        print(entry)
+        if (entry[0] == name):
+            print("Story found")
+            entry[1] += content
+            entry[2] = content
+
+    db.close()
 
 if __name__ == '__main__':
     create_db()
     create_story("soojinchoi","soojinchoi","soojinchoi")
+    add_to_story("soojinchoi"," blah blah blah")
