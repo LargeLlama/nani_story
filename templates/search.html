@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<form action="/search">
+    <input type="text" name="query" placeholder="Search for a story" value="{{ query }}">
+    <input type="submit" name="submit" value="Search">
+</form>
+
+<!-- LOOP 4 results -->
+
+{% endblock %}

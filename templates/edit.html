@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>{{ title }}</h2>
+
+<p>{{ last_content }}</p>
+
+<form action="/edit">
+
+    <textarea rows="10" cols="50" name="new_content"></textarea>
+    <br>
+    <input type="submit" name="submit" value="Submit">
+
+</form>
+
+{% endblock %}
