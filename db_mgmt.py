@@ -52,8 +52,9 @@ def add_to_story(title, content):
         print(entry)
         if (entry[0] == title):
             print("Story found")
-            entry[1] += content
-            entry[2] = content
+            new_story = entry[1] + content
+            add_tuple = (new_story, content, title)
+            c.execute('UPDATE stories SET story = (?), last_edit = (?) WHERE title = (?)', add_tuple)
 
     db.commit()
     db.close()

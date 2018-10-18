@@ -1,3 +1,6 @@
+antonD raunakC -- 2018-10-18 13:56
+- Fixed add_to_story error
+
 antonD -- 2018-10-17 21:49
 - Encountered error with tuple object not supporting item assignment, aka can't add to story
 
