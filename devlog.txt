@@ -1,3 +1,6 @@
+soojinC joanC -- 2018-10-18 14:05
+- Finished templates
+
 antonD raunakC -- 2018-10-18 13:56
 - Fixed add_to_story error
 
