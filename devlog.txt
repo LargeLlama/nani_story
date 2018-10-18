@@ -1,3 +1,6 @@
+antonD raunakC -- 2018-10-17 21:46
+- Worked on add_to_story function
+
 raunakC -- 2018-10-17 16:35
 - Completed the create_story function
 

@@ -29,6 +29,7 @@ def create_story(title, content, last_edit):
     for entry in c:
         print(entry)
 
+    db.commit()
     db.close()
 
 def auth_user(user):
@@ -37,7 +38,7 @@ def auth_user(user):
     '''
     pass
 
-def add_to_story(story, content):
+def add_to_story(title, content):
     '''
     Finds the story that goes by title in the database
     Adds content to the end of the story and updates last_edit
@@ -49,11 +50,12 @@ def add_to_story(story, content):
 
     for entry in c:
         print(entry)
-        if (entry[0] == name):
+        if (entry[0] == title):
             print("Story found")
             entry[1] += content
             entry[2] = content
 
+    db.commit()
     db.close()
 
 if __name__ == '__main__':
