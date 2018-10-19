@@ -1,4 +1,5 @@
 import sqlite3
+import random
 
 DB_FILE="./data/stories.db"
 
@@ -35,15 +36,25 @@ def create_story(title, content, last_edit):
 def register(user,password):
     '''
     register username and password.
+    returns True if registered successfully.
+    returns False if not.
     '''
     db = sqlite3.connect(DB_FILE)
     c = db.cursor()
+
+    command_tuple = (user,)
+    # check if user exists
+    c.execute('SELECT * FROM user WHERE username = (?)', command_tuple)
+    # if there are tuples, then the user exists and return false
+    for entry in c:
+        return False
 
     command_tuple = (user,password)
     c.execute('INSERT INTO user VALUES(?,?)',command_tuple)
 
     db.commit()
     db.close()
+    return True
 
 def auth_user(user, password):
     '''
@@ -75,9 +86,7 @@ def add_to_story(title, content):
     c.execute('SELECT * FROM stories')
 
     for entry in c:
-        print(entry)
         if (entry[0] == title):
-            print("Story found")
             new_story = entry[1] + content
             add_tuple = (new_story, content, title)
             c.execute('UPDATE stories SET story = (?), last_edit = (?) WHERE title = (?)', add_tuple)
@@ -92,11 +101,30 @@ def random_story():
     db = sqlite3.connect(DB_FILE)
     c = db.cursor()
 
+def return_story(title):
+    '''
+    Return a story for viewing purposes.
+    Returns None if no story with the title is found.
+    Returns the tuple (title, story, last_edit) if title found.
+    '''
+    db = sqlite3.connect(DB_FILE)
+    c = db.cursor()
+
+    c.execute('SELECT * FROM stories')
+
+    for entry in c:
+        if (entry[0] == title):
+            return entry
+
+    db.close()
+
+
 
 if __name__ == '__main__':
-    create_db()
-    create_story("soojinchoi","soojinchoi","soojinchoi")
+    #create_db()
+    #create_story("soojinchoi","soojinchoi","soojinchoi")
     add_to_story("soojinchoi"," blah blah blah")
-    register('j', 'k')
+    print('registering j: {}'.format(register('j', 'k')))
     print('authenticating soojin: {}'.format(auth_user('soojinchoi', 'soojinchoi')))
     print('authenticating j: {}'.format(auth_user('j', 'k')))
+    print('return_story: {}'.format(return_story('soojinchoi')))
