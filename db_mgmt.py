@@ -32,11 +32,37 @@ def create_story(title, content, last_edit):
     db.commit()
     db.close()
 
-def auth_user(user):
+def register(user,password):
     '''
-    ensures the user is in the db.
+    register username and password.
     '''
-    pass
+    db = sqlite3.connect(DB_FILE)
+    c = db.cursor()
+
+    command_tuple = (user,password)
+    c.execute('INSERT INTO user VALUES(?,?)',command_tuple)
+
+    db.commit()
+    db.close()
+
+def auth_user(user, password):
+    '''
+    ensures the user is in the db upon login submission.
+    '''
+    db = sqlite3.connect(DB_FILE) #open if file exists, otherwise create
+    c = db.cursor()               #facilitate db ops
+
+    command_tuple = (user,password)
+    c.execute('SELECT * FROM user WHERE username = (?) AND password = (?)', command_tuple)
+
+    for entry in c:
+        # check auth
+        if entry[0] == user and entry[1] == password:
+            return True
+
+    db.close()
+    # return false at end
+    return False
 
 def add_to_story(title, content):
     '''
@@ -59,7 +85,18 @@ def add_to_story(title, content):
     db.commit()
     db.close()
 
+def random_story():
+    '''
+    Return a randomly selected story.
+    '''
+    db = sqlite3.connect(DB_FILE)
+    c = db.cursor()
+
+
 if __name__ == '__main__':
     create_db()
     create_story("soojinchoi","soojinchoi","soojinchoi")
     add_to_story("soojinchoi"," blah blah blah")
+    register('j', 'k')
+    print('authenticating soojin: {}'.format(auth_user('soojinchoi', 'soojinchoi')))
+    print('authenticating j: {}'.format(auth_user('j', 'k')))
