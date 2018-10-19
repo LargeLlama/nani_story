@@ -31,9 +31,23 @@ def authenticate():
 
         return render_template('home.html', username=session['username'])
 
-@app.route('/home')
+@app.route('/logout')
+def logout():
+    if 'username' in session:
+        session.pop('username')
+    return redirect(url_for('root_redirect'))
+
+@app.route('/home', methods=['POST'])
 def home():
-    
+    action = request.form['action']
+
+    if (action == 'Create a story'):
+        return render_template('create.html')
+
+    elif (action == 'Add to a story'):
+        return render_template('add.html')
+
+
 
 
 if __name__ == '__main__':
