@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, session, url_for, redirect, flash
 import os
+import db_mgmt as dbm
 app = Flask(__name__) #create instance of class Flask
 
 app.secret_key = os.urandom(32)
@@ -18,18 +19,22 @@ def authenticate():
     action = request.form['action']
 
     if (action == 'Login'):
-
-        session['username'] = username
-
-        return render_template('home.html', username=session['username'])
+        success = dbm.auth_user(username, password)
+        if success:
+            session['username'] = username
+            return render_template('home.html', username=session['username'])
+        else:
+            flash('Incorrect username or password!')
+            return redirect(url_for('root_redirect'))
 
     elif (action == 'Create Account'):
-
-        #create Account
-
-        session['username'] = username
-
-        return render_template('home.html', username=session['username'])
+        success = dbm.register(username, password)
+        if success:
+            session['username'] = username
+            return render_template('home.html', username=session['username'])
+        else:
+            flash('Username taken!')
+            return redirect(url_for('root_redirect'))
 
 @app.route('/logout')
 def logout():
@@ -46,6 +51,25 @@ def home():
 
     elif (action == 'Add to a story'):
         return render_template('add.html')
+
+@app.route('/create')
+def create():
+    new_title = request.args['title']
+
+    # insert title into DB
+
+    return render_template('edit.html', title=new_title, last_content="")
+
+# @app.route('/search')
+# def show_search():
+#     query = request.args('query')
+#
+#     # search for story
+#
+#     # gets tuple of story titles and redirects to search.html, which loops + displays titles as form inputs
+#
+#
+
 
 
 

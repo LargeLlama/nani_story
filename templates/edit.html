@@ -8,9 +8,13 @@
 
 <form action="/edit">
 
-    <textarea rows="10" cols="50" name="new_content"></textarea>
-    <br>
-    <input type="submit" name="submit" value="Submit">
+  <input type="text" value="{{ title }}" readonly hidden>
+
+  <textarea rows="10" cols="70" readonly>{{ last_content }}</textarea>
+  <br>
+  <textarea rows="10" cols="70" name="new_content"></textarea>
+  <br>
+  <input type="submit" name="submit" value="Submit">
 
 </form>
 

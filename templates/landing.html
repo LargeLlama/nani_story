@@ -8,6 +8,10 @@
     <body>
         <center>
             <h1>StoriBois</h1>
+            {% set msgs = get_flashed_messages() %}
+            {% for msg in msgs %}
+            <p>{{ msg }}</p>
+            {% endfor %}
             <form action="/login" method="POST">
                 <label for="username">Username: </label>
                 <input type="text" name="username">
