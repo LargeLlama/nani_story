@@ -56,7 +56,7 @@ def home():
 def create():
     new_title = request.args['title']
 
-    # insert title into DB
+    dbm.create_story(new_title, '', '')
 
     return render_template('edit.html', title=new_title, last_content="")
 
