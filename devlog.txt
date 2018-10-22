@@ -1,3 +1,8 @@
+soojinC joanC -- 2018-10-21 20:55
+- Updated templates
+- Worked on app.py
+	- Did view, edit, and add_to_story
+
 soojinC joanC -- 2018-10-18 14:05
 - Finished templates
 
