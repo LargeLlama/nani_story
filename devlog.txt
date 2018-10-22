@@ -1,3 +1,6 @@
+soojinC joanC -- 2018-10-22 14:00
+- finished all displaying EXCEPT random story
+
 raunakC soojinC joanC antonD -- 2018-10-22 14:00
 - modified create_db
 - added HTML tags when creating and adding stories
