@@ -4,11 +4,9 @@
 
 <h2>{{ title }}</h2>
 
-<p>{{ last_content }}</p>
+<form action="/add_to_story" method="POST">
 
-<form action="/edit">
-
-  <input type="text" value="{{ title }}" readonly hidden>
+  <input type="text" name="title" value="{{ title }}" readonly hidden>
 
   <textarea rows="10" cols="70" readonly>{{ last_content }}</textarea>
   <br>

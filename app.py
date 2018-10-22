@@ -60,16 +60,41 @@ def create():
 
     return render_template('edit.html', title=new_title, last_content="")
 
-# @app.route('/search')
-# def show_search():
-#     query = request.args('query')
-#
-#     # search for story
-#
-#     # gets tuple of story titles and redirects to search.html, which loops + displays titles as form inputs
-#
-#
 
+
+@app.route('/search')
+def show_search():
+    user_query = request.args['query']
+
+    # search for story
+
+    # gets tuple of story titles and redirects to search.html, which loops + displays titles as form inputs
+    return render_template('search.html', results=["Jesus is my father", "Jimmy is my sister", "soojinchoi"], query=user_query)
+
+
+@app.route('/edit', methods=["POST"])
+def edit():
+    to_edit = request.form['result']
+
+    story_tuple = dbm.return_story(to_edit)
+
+    return render_template('edit.html', title=story_tuple[0], last_content=story_tuple[2])
+
+@app.route('/add_to_story', methods=["POST"])
+def add_to_story():
+    story_title = request.form['title']
+    new_content = request.form['new_content']
+
+    dbm.add_to_story(story_title, new_content)
+
+    flash('Your addition to the story was submitted!')
+    return redirect(url_for('view_story', title=story_title))
+
+@app.route('/view?title=<title>')
+def view_story(title):
+    story_tuple = dbm.return_story(title)
+
+    return render_template('view.html', title=story_tuple[0], content=story_tuple[1])
 
 
 

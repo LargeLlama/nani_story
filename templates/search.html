@@ -2,6 +2,8 @@
 
 {% block content %}
 
+<br>
+
 <form action="/search">
     <input type="text" name="query" placeholder="Search for a story" value="{{ query }}">
     <input type="submit" name="submit" value="Search">
@@ -12,8 +14,14 @@
 <p>{{ msg }}</p>
 {% endfor %} -->
 
-{% for result in result %}
-
-{% endfor %}
+<center>
+  <h2>Search results for {{ query }}:</h2>
+  <form action="/edit" method="POST">
+  {% for result in results %}
+    <input type="submit" name="result" value="{{ result }}">
+    <br>
+  {% endfor %}
+  </form>
+</center>
 
 {% endblock %}
