@@ -1,5 +1,7 @@
-joanC soojinC -- 2018-10-21 21:10
--
+joanC soojinC -- 2018-10-21 22:40
+- worked on app.py
+- BUG: double "edits" when creating a story
+	- Due to create_story and edit_story fxns adding user as editor
 
 raunakC antonD -- 2018-10-21 21:10
 - finished search_story
