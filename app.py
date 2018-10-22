@@ -111,7 +111,6 @@ def add_to_story():
 @app.route('/view?title=<title>')
 def view_story(title):
     story_tuple = dbm.return_story(title)
-
     return render_template('view.html', title=story_tuple[0], content=story_tuple[1])
 
 
