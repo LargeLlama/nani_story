@@ -1,7 +1,13 @@
-soojinC joanC -- 2018-10-21 20:55
-- Updated templates
-- Worked on app.py
-	- Did view, edit, and add_to_story
+joanC soojinC -- 2018-10-21 21:10
+- 
+
+raunakC antonD -- 2018-10-21 21:10
+- finished search_story
+- added checks to create_story
+
+raunakC soojinC joanC antonD -- 2018-10-18 14:00
+- Got basic Flask app running
+- Added checks to db mgmt to prevent crashes
 
 soojinC joanC -- 2018-10-18 14:05
 - Finished templates

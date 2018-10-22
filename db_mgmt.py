@@ -15,7 +15,7 @@ def create_db():
     c.execute('CREATE TABLE stories (title TEXT PRIMARY KEY, story TEXT, last_edit TEXT)')
 
 
-def create_story(title, content, last_edit):
+def create_story(title, content):
     '''
     Takes the title, content, and user and adds it to the dbs
     Assumes that the user has been verified by Flask.
@@ -23,15 +23,20 @@ def create_story(title, content, last_edit):
     db = sqlite3.connect(DB_FILE) #open if file exists, otherwise create
     c = db.cursor()               #facilitate db ops
 
-    command_tuple = (title, content, last_edit)
-    c.execute('INSERT INTO stories VALUES(?,?,?)',command_tuple)
-    c.execute('SELECT * FROM stories')
-
+    # check if title exists
+    command_tuple = (title,)
+    c.execute('SELECT * FROM stories WHERE title = (?)', command_tuple)
+    # if there are tuples, then the story title exists and return false
     for entry in c:
-        print(entry)
+        return False
+
+    command_tuple = (title, content,content)
+    c.execute('INSERT INTO stories VALUES(?,?,?)',command_tuple)
 
     db.commit()
     db.close()
+
+    return True
 
 def register(user,password):
     '''
@@ -83,13 +88,13 @@ def add_to_story(title, content):
     db = sqlite3.connect(DB_FILE)
     c = db.cursor()
 
-    c.execute('SELECT * FROM stories')
+    select_tuple = (title,)
+    c.execute('SELECT * FROM stories WHERE title = (?)', select_tuple)
 
     for entry in c:
-        if (entry[0] == title):
-            new_story = entry[1] + content
-            add_tuple = (new_story, content, title)
-            c.execute('UPDATE stories SET story = (?), last_edit = (?) WHERE title = (?)', add_tuple)
+      new_story = entry[1] + content
+      add_tuple = (new_story, content, title)
+      c.execute('UPDATE stories SET story = (?), last_edit = (?) WHERE title = (?)', add_tuple)
 
     db.commit()
     db.close()
@@ -110,21 +115,41 @@ def return_story(title):
     db = sqlite3.connect(DB_FILE)
     c = db.cursor()
 
-    c.execute('SELECT * FROM stories')
+    command_tuple = (title,)
+    c.execute('SELECT * FROM stories WHERE title = (?)', command_tuple)
 
     for entry in c:
-        if (entry[0] == title):
-            return entry
-
+      return entry
     db.close()
 
+def search_story(title):
+    '''
+    Return a list of stories that you searched for
+    returns a list of the titles of all the stories found
+    '''
+    db = sqlite3.connect(DB_FILE)
+    c = db.cursor()
+
+    list_stories = []
+
+    c.execute('SELECT title FROM stories')
+
+    for entry in c:
+      if (entry[0].find(title) != -1):
+          list_stories.append(entry[0])
+
+    db.close()
+    return list_stories
 
 
 if __name__ == '__main__':
     #create_db()
-    #create_story("soojinchoi","soojinchoi","soojinchoi")
+    print('creating soojinchoi: {}'.format(create_story("soojinchoi","soojinchoi")))
+    print('creating soojin2: {}'.format(create_story("soojin2","story time")))
+    print('creating soojin3: {}'.format(create_story("soojin3","adios amigos")))
     add_to_story("soojinchoi"," blah blah blah")
     print('registering j: {}'.format(register('j', 'k')))
     print('authenticating soojin: {}'.format(auth_user('soojinchoi', 'soojinchoi')))
     print('authenticating j: {}'.format(auth_user('j', 'k')))
     print('return_story: {}'.format(return_story('soojinchoi')))
+    print('returning a sample search: {}'.format(search_story('soojin')))
