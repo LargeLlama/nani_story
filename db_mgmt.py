@@ -15,7 +15,7 @@ def create_db():
     c.execute('CREATE TABLE stories (title TEXT PRIMARY KEY, story TEXT, last_edit TEXT)')
 
 
-def create_story(title, content):
+def create_story(title, content, user):
     '''
     Takes the title, content, and user and adds it to the dbs
     Assumes that the user has been verified by Flask.
@@ -28,10 +28,14 @@ def create_story(title, content):
     c.execute('SELECT * FROM stories WHERE title = (?)', command_tuple)
     # if there are tuples, then the story title exists and return false
     for entry in c:
+        db.close()
         return False
 
     command_tuple = (title,content,content)
     c.execute('INSERT INTO stories VALUES(?,?,?)',command_tuple)
+    command_tuple = (user,title)
+    c.execute('INSERT INTO story_edits VALUES(?,?)',command_tuple)
+
 
     db.commit()
     db.close()
@@ -74,6 +78,7 @@ def auth_user(user, password):
     for entry in c:
         # check auth
         if entry[0] == user and entry[1] == password:
+            db.close()
             return True
 
     db.close()
@@ -125,6 +130,24 @@ def edited_stories(user):
 
     return titles
 
+def edited_or_not(title, user):
+    '''
+    returns a boolean based on whether the user has edited or not.
+    '''
+    db = sqlite3.connect(DB_FILE)
+    c = db.cursor()
+    boolean = False
+
+    command_tuple = (title,user)
+    c.execute('SELECT * FROM story_edits WHERE title = (?) AND username = (?)', command_tuple)
+
+    for entry in c:
+        boolean = True
+
+    db.close()
+    return boolean
+
+
 def return_story(title):
     '''
     Return a story for viewing purposes.
@@ -138,8 +161,10 @@ def return_story(title):
     c.execute('SELECT * FROM stories WHERE title = (?)', command_tuple)
 
     for entry in c:
-        return entry
+        return_entry = entry
+
     db.close()
+    return return_entry
 
 def search_story(title):
     '''
@@ -163,13 +188,14 @@ def search_story(title):
 
 if __name__ == '__main__':
     #create_db()
-    print('creating soojinchoi: {}'.format(create_story("soojinchoi","soojinchoi")))
-    print('creating soojin2: {}'.format(create_story("soojin2","story time")))
-    print('creating soojin3: {}'.format(create_story("soojin3","adios amigos")))
-    add_to_story("soojinchoi"," blah blah blah", "j")
+    print('creating soojinchoi: {}'.format(create_story("soojinchoi","soojinchoi",'j')))
+    print('creating soojin2: {}'.format(create_story("soojin2","story time",'j')))
+    print('creating soojin3: {}'.format(create_story("soojin3","adios amigos",'j')))
+    add_to_story("soojinchoi"," blah blah blah",'j')
     print('registering j: {}'.format(register('j', 'k')))
     print('authenticating soojin: {}'.format(auth_user('soojinchoi', 'soojinchoi')))
     print('authenticating j: {}'.format(auth_user('j', 'k')))
     print('return_story: {}'.format(return_story('soojinchoi')))
     print('returning a sample search: {}'.format(search_story('soojin')))
-    print('returning all stories edited by j:{}'.format(edited_stories('j')))
+    print('returning edited stories by j: {}'.format(edited_stories('j')))
+    print('edited_or_not by j:{}'.format(edited_or_not('soojinchoi','j')))

@@ -1,9 +1,10 @@
 joanC soojinC -- 2018-10-21 21:10
-- 
+-
 
 raunakC antonD -- 2018-10-21 21:10
 - finished search_story
 - added checks to create_story
+- added edited_or_not helper function
 
 raunakC soojinC joanC antonD -- 2018-10-18 14:00
 - Got basic Flask app running
