@@ -30,7 +30,7 @@ def create_story(title, content):
     for entry in c:
         return False
 
-    command_tuple = (title, content,content)
+    command_tuple = (title,content,content)
     c.execute('INSERT INTO stories VALUES(?,?,?)',command_tuple)
 
     db.commit()
@@ -80,7 +80,7 @@ def auth_user(user, password):
     # return false at end
     return False
 
-def add_to_story(title, content):
+def add_to_story(title, content, user):
     '''
     Finds the story that goes by title in the database
     Adds content to the end of the story and updates last_edit
@@ -92,9 +92,11 @@ def add_to_story(title, content):
     c.execute('SELECT * FROM stories WHERE title = (?)', select_tuple)
 
     for entry in c:
-      new_story = entry[1] + content
-      add_tuple = (new_story, content, title)
-      c.execute('UPDATE stories SET story = (?), last_edit = (?) WHERE title = (?)', add_tuple)
+        new_story = entry[1] + "\n" + content
+        add_tuple = (new_story, content, title)
+        c.execute('UPDATE stories SET story = (?), last_edit = (?) WHERE title = (?)', add_tuple)
+        user_tuple = (user, title)
+        c.execute('INSERT INTO story_edits VALUES(?,?)', user_tuple)
 
     db.commit()
     db.close()
@@ -105,6 +107,23 @@ def random_story():
     '''
     db = sqlite3.connect(DB_FILE)
     c = db.cursor()
+
+def edited_stories(user):
+    '''
+    returns a list of the titles of stories that the user has edited
+    '''
+    db = sqlite3.connect(DB_FILE)
+    c = db.cursor()
+
+    titles = []
+
+    command_tuple = (user,)
+    c.execute('SELECT * FROM story_edits WHERE username = (?)', command_tuple)
+
+    for entry in c:
+        titles.append(entry)
+
+    return titles
 
 def return_story(title):
     '''
@@ -119,7 +138,7 @@ def return_story(title):
     c.execute('SELECT * FROM stories WHERE title = (?)', command_tuple)
 
     for entry in c:
-      return entry
+        return entry
     db.close()
 
 def search_story(title):
@@ -135,8 +154,8 @@ def search_story(title):
     c.execute('SELECT title FROM stories')
 
     for entry in c:
-      if (entry[0].find(title) != -1):
-          list_stories.append(entry[0])
+        if (entry[0].find(title) != -1):
+            list_stories.append(entry[0])
 
     db.close()
     return list_stories
@@ -147,9 +166,10 @@ if __name__ == '__main__':
     print('creating soojinchoi: {}'.format(create_story("soojinchoi","soojinchoi")))
     print('creating soojin2: {}'.format(create_story("soojin2","story time")))
     print('creating soojin3: {}'.format(create_story("soojin3","adios amigos")))
-    add_to_story("soojinchoi"," blah blah blah")
+    add_to_story("soojinchoi"," blah blah blah", "j")
     print('registering j: {}'.format(register('j', 'k')))
     print('authenticating soojin: {}'.format(auth_user('soojinchoi', 'soojinchoi')))
     print('authenticating j: {}'.format(auth_user('j', 'k')))
     print('return_story: {}'.format(return_story('soojinchoi')))
     print('returning a sample search: {}'.format(search_story('soojin')))
+    print('returning all stories edited by j:{}'.format(edited_stories('j')))
