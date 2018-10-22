@@ -156,6 +156,7 @@ def return_story(title):
     '''
     db = sqlite3.connect(DB_FILE)
     c = db.cursor()
+    return_entry = None
 
     command_tuple = (title,)
     c.execute('SELECT * FROM stories WHERE title = (?)', command_tuple)
@@ -184,7 +185,6 @@ def search_story(title):
 
     db.close()
     return list_stories
-
 
 if __name__ == '__main__':
     #create_db()
