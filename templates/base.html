@@ -6,9 +6,9 @@
         <title> {% block title %}{% endblock %} -|- StoriBois</title>
         {% endblock %}
     </head>
-    
+
     <body>
-        
+
         <table border="1">
             <tr>
                 <td>
@@ -18,10 +18,16 @@
                 </td>
             </tr>
         </table>
-        
+
         {% block content %}
         {% endblock %}
-        
+
+        <br>
+
+        {% block footer %}
+        <a href="/">Go back home</a>
+        {% endblock %}
+
     </body>
-    
+
 </html>

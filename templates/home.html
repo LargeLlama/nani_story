@@ -9,6 +9,11 @@
     <h1>StoryBois</h1>
     <p>Welcome {{ username }}</p>
 
+    {% set msgs = get_flashed_messages() %}
+    {% for msg in msgs %}
+    <p>{{ msg }}</p>
+    {% endfor %}
+
     <br>
 
     <form action="/home" method="POST">
@@ -19,7 +24,9 @@
 
     <br>
 
-    {{ links }}
+    {% block footer %}
+
+    {% endblock %}
 
 </center>
 

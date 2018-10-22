@@ -54,10 +54,7 @@ def home():
         return render_template('add.html')
 
     elif (action == "View stories you've edited"):
-
         my_story_list = dbm.edited_stories(session['username'])
-        my_story_list = [i[0] for i in my_story_list]
-
         return render_template('my_stories.html', results=my_story_list)
 
 @app.route('/get_story', methods=["POST"])
@@ -67,15 +64,18 @@ def get_story():
 
 
 
-@app.route('/create')
+@app.route('/create', methods=["POST"])
 def create():
-    new_title = request.args['title']
+    new_title = request.form['title']
+    new_content = request.form['new_content']
 
-    if dbm.create_story(new_title, '', session['username']):
-        return render_template('edit.html', title=new_title, last_content="")
+    if dbm.return_story(new_title) == None:
+        dbm.create_story(new_title, new_content, session['username'])
+        flash('Story creation successful!')
+        return redirect(url_for('root_redirect'))
     else:
         flash('Story name already taken')
-        return render_template('create.html')
+        return render_template('create.html', old_value=new_content)
 
 
 
