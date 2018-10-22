@@ -81,6 +81,9 @@ def create():
 
 @app.route('/search')
 def show_search():
+    if submit == 'Random Story':
+        print('skreet')
+
     user_query = request.args['query']
 
     search_results = dbm.search_story(user_query)
