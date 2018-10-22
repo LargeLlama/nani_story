@@ -189,7 +189,7 @@ def search_story(title):
     return list_stories
 
 if __name__ == '__main__':
-    #create_db()
+    create_db()
     print('creating soojinchoi: {}'.format(create_story("soojinchoi","soojinchoi",'j')))
     print('creating soojin2: {}'.format(create_story("soojin2","story time",'j')))
     print('creating soojin3: {}'.format(create_story("soojin3","adios amigos",'j')))

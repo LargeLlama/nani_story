@@ -55,8 +55,8 @@ def home():
 
     elif (action == "View stories you've edited"):
 
-        # doesn't work yet but will!
         my_story_list = dbm.edited_stories(session['username'])
+        my_story_list = [i[0] for i in my_story_list]
 
         return render_template('my_stories.html', results=my_story_list)
 
@@ -103,7 +103,7 @@ def add_to_story():
     story_title = request.form['title']
     new_content = request.form['new_content']
 
-    dbm.add_to_story(story_title, new_content)
+    dbm.add_to_story(story_title, new_content, session['username'])
 
     flash('Your addition to the story was submitted!')
     return redirect(url_for('view_story', title=story_title))
