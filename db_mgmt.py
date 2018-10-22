@@ -112,8 +112,27 @@ def random_story():
     '''
     db = sqlite3.connect(DB_FILE)
     c = db.cursor()
+    count = 0
+    current_count = 0
+    story = None
 
-    return return_story
+    # get the number of rows of the table
+    c.execute('SELECT count(*) FROM stories')
+    for entry in c:
+      count = random.randint(0,entry[0])
+
+    # if there's nothing in the db
+    if count == 0:
+      return story
+
+    c.execute('SELECT * FROM stories')
+    for entry in c:
+      if current_count == count:
+        story = entry
+        break
+      current_count+=1
+
+    return story
 
 def edited_stories(user):
     '''
@@ -128,7 +147,7 @@ def edited_stories(user):
     c.execute('SELECT title FROM story_edits WHERE username = (?)', command_tuple)
 
     for entry in c:
-        titles.append(entry)
+        titles.append(entry[0])
 
     return titles
 
@@ -189,7 +208,7 @@ def search_story(title):
     return list_stories
 
 if __name__ == '__main__':
-    create_db()
+    #create_db()
     print('creating soojinchoi: {}'.format(create_story("soojinchoi","soojinchoi",'j')))
     print('creating soojin2: {}'.format(create_story("soojin2","story time",'j')))
     print('creating soojin3: {}'.format(create_story("soojin3","adios amigos",'j')))
@@ -201,3 +220,5 @@ if __name__ == '__main__':
     print('returning a sample search: {}'.format(search_story('soojin')))
     print('returning edited stories by j: {}'.format(edited_stories('j')))
     print('edited_or_not by j:{}'.format(edited_or_not('soojinchoi','j')))
+    for i in range(5):
+        print('Printing random story {}: {}'.format(i,random_story()))
