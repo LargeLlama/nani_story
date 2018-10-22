@@ -14,6 +14,8 @@ def create_db():
     c.execute('CREATE TABLE story_edits (username TEXT, title TEXT)')
     c.execute('CREATE TABLE stories (title TEXT PRIMARY KEY, story TEXT, last_edit TEXT)')
 
+    db.commit()
+    db.close()
 
 def create_story(title, content, user):
     '''
@@ -31,7 +33,7 @@ def create_story(title, content, user):
         db.close()
         return False
 
-    command_tuple = (title,content,content)
+    command_tuple = (title,'<p>' + content + '</p>',content)
     c.execute('INSERT INTO stories VALUES(?,?,?)',command_tuple)
     command_tuple = (user,title)
     c.execute('INSERT INTO story_edits VALUES(?,?)',command_tuple)
@@ -97,7 +99,7 @@ def add_to_story(title, content, user):
     c.execute('SELECT * FROM stories WHERE title = (?)', select_tuple)
 
     for entry in c:
-        new_story = entry[1] + "\n" + content
+        new_story = entry[1] + "<p>" + content + "</p>"
         add_tuple = (new_story, content, title)
         c.execute('UPDATE stories SET story = (?), last_edit = (?) WHERE title = (?)', add_tuple)
         user_tuple = (user, title)

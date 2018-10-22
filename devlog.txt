@@ -1,3 +1,7 @@
+raunakC soojinC joanC antonD -- 2018-10-22 14:00
+- modified create_db
+- added HTML tags when creating and adding stories
+
 joanC soojinC -- 2018-10-21 22:40
 - worked on app.py
 - BUG: double "edits" when creating a story
