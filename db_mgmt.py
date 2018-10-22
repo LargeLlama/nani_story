@@ -113,6 +113,8 @@ def random_story():
     db = sqlite3.connect(DB_FILE)
     c = db.cursor()
 
+    return return_story
+
 def edited_stories(user):
     '''
     returns a list of the titles of stories that the user has edited
@@ -123,7 +125,7 @@ def edited_stories(user):
     titles = []
 
     command_tuple = (user,)
-    c.execute('SELECT * FROM story_edits WHERE username = (?)', command_tuple)
+    c.execute('SELECT title FROM story_edits WHERE username = (?)', command_tuple)
 
     for entry in c:
         titles.append(entry)
