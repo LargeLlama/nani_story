@@ -22,25 +22,25 @@ Installing and creating a virtual environment:
     $ deactivate
     ```
 
-##Step 1: Clone Repo and Run Code
+## Step 1: Clone Repo and Run Code
 
-####Clone repo:
+#### Clone repo:
 ```
 $ git clone <link>
 ```
 
-####Enter repo:
+#### Enter repo:
 ```
 $ cd nani_story
 ```
 
-####Run code:
+#### Run code:
 ```
 $ python app.py
 ```
 
-####Copy local host address into a browser.
+#### Copy local host address into a browser.
 
-##Step 2: Create Account or Login
+## Step 2: Create Account or Login
 
-##Step 3: Choose Between Create, Edit, and View Stories
+## Step 3: Choose Between Create, Edit, and View Stories
