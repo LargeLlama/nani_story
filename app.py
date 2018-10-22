@@ -52,6 +52,21 @@ def home():
     elif (action == 'Add to a story'):
         return render_template('add.html')
 
+    elif (action == "View stories you've edited"):
+
+        # doesn't work yet but will!
+        # my_story_list = dbm.return_my_stories()
+        my_story_list = ['soojinchoi']
+
+        return render_template('my_stories.html', results=my_story_list)
+
+@app.route('/get_story', methods=["POST"])
+def get_story():
+    story_title = request.form['result']
+    return redirect(url_for('view_story', title=story_title))
+
+
+
 @app.route('/create')
 def create():
     new_title = request.args['title']
@@ -66,10 +81,10 @@ def create():
 def show_search():
     user_query = request.args['query']
 
-    # search for story
+    search_results = dbm.search_story(user_query)
 
     # gets tuple of story titles and redirects to search.html, which loops + displays titles as form inputs
-    return render_template('search.html', results=["Jesus is my father", "Jimmy is my sister", "soojinchoi"], query=user_query)
+    return render_template('search.html', results=search_results, query=user_query)
 
 
 @app.route('/edit', methods=["POST"])
@@ -95,6 +110,7 @@ def view_story(title):
     story_tuple = dbm.return_story(title)
 
     return render_template('view.html', title=story_tuple[0], content=story_tuple[1])
+
 
 
 

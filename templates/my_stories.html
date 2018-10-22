@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Your stories{% endblock %}
+
+{% block content %}
+
+<center>
+  <h2>Stories you've edited:</h2>
+  <form action="/get_story" method="POST">
+  {% for result in results %}
+    <input type="submit" name="result" value="{{ result }}">
+    <br>
+  {% endfor %}
+  </form>
+</center>
+
+{% endblock %}
