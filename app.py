@@ -7,6 +7,7 @@ app.secret_key = os.urandom(32)
 
 @app.route('/')
 def root_redirect():
+    print(session)
     if 'username' in session:
         return render_template('home.html', username=session['username'])
     else:
@@ -55,8 +56,7 @@ def home():
     elif (action == "View stories you've edited"):
 
         # doesn't work yet but will!
-        # my_story_list = dbm.return_my_stories()
-        my_story_list = ['soojinchoi']
+        my_story_list = dbm.edited_stories(session['username'])
 
         return render_template('my_stories.html', results=my_story_list)
 
@@ -71,9 +71,11 @@ def get_story():
 def create():
     new_title = request.args['title']
 
-    dbm.create_story(new_title, '', '')
-
-    return render_template('edit.html', title=new_title, last_content="")
+    if dbm.create_story(new_title, '', session['username']):
+        return render_template('edit.html', title=new_title, last_content="")
+    else:
+        flash('Story name already taken')
+        return render_template('create.html')
 
 
 
@@ -90,10 +92,11 @@ def show_search():
 @app.route('/edit', methods=["POST"])
 def edit():
     to_edit = request.form['result']
-
-    story_tuple = dbm.return_story(to_edit)
-
-    return render_template('edit.html', title=story_tuple[0], last_content=story_tuple[2])
+    if (dbm.edited_or_not(to_edit, session['username'])):
+        return redirect(url_for('view_story', title=to_edit))
+    else:
+        story_tuple = dbm.return_story(to_edit)
+        return render_template('edit.html', title=story_tuple[0], last_content=story_tuple[2])
 
 @app.route('/add_to_story', methods=["POST"])
 def add_to_story():
@@ -110,9 +113,6 @@ def view_story(title):
     story_tuple = dbm.return_story(title)
 
     return render_template('view.html', title=story_tuple[0], content=story_tuple[1])
-
-
-
 
 
 if __name__ == '__main__':
