@@ -7,6 +7,9 @@ app.secret_key = os.urandom(32)
 
 @app.route('/')
 def root_redirect():
+    '''
+    redirects user to appropriate page depending on whether or not they're logged in
+    '''
     print(session)
     # if logged in, go home
     if 'username' in session:
@@ -18,10 +21,18 @@ def root_redirect():
 
 @app.route('/landing')
 def landing():
+    '''
+    renders landing.html, the login/create-account page
+    '''
     return render_template('landing.html')
 
 @app.route('/login', methods=['POST'])
 def authenticate():
+    '''
+    checks user credentials
+    logs user in and redirects to home page if username-password pair is correct
+    else flashes user and redirects back to landing
+    '''
     # get inputs and action type
     username = request.form['username']
     password = request.form['password']
@@ -30,7 +41,7 @@ def authenticate():
     # if either is blank, redirect them back to landing
     if (username == '' or password == ''):
         flash('Invalid username or password!')
-
+        return redirect(url_for())
 
     # if they're trying to log in
     if (action == 'Login'):
@@ -63,6 +74,10 @@ def authenticate():
 
 @app.route('/logout')
 def logout():
+    '''
+    if user is logged in, pops username from cookies
+    regardless, redirects to landing page
+    '''
     if 'username' in session:
         session.pop('username')
     return redirect(url_for('landing'))
@@ -70,6 +85,9 @@ def logout():
 # renders home
 @app.route('/home')
 def home():
+    '''
+    renders home page with the username in session
+    '''
     if not 'username' in session:
         return kick_out_user_not_signed_in()
     return render_template('home.html', username=session['username'])
@@ -77,6 +95,13 @@ def home():
 # does actions for form(s) in /home
 @app.route('/home_action', methods=['POST'])
 def home_action():
+    '''
+    takes user input from home page and...
+    - redirects to create story page
+    - redirects to add to story page
+    - redirects to view my stories page
+    depending on input
+    '''
     if not 'username' in session:
         return kick_out_user_not_signed_in()
     # stores action user has clicked on
@@ -93,14 +118,25 @@ def home_action():
 
 @app.route('/create/<title>', methods=["GET", "POST"])
 def create(title):
+    '''
+    renders create story page
+    takes title as input, which is useful when checking if title is valid
+    '''
     if not 'username' in session:
         return kick_out_user_not_signed_in()
+    print('title user has input\'d: {}'.format(title))
     if (title == 'None'):
         title = ''
     return render_template('create.html', title=title)
 
 @app.route('/create_action', methods=["POST"])
 def create_action():
+    '''
+    takes user input from create story page and...
+    - checks title then redirects back to create story page
+    - creates story given title and content
+    depending on input
+    '''
     if not 'username' in session:
         return kick_out_user_not_signed_in()
     # get input
@@ -119,6 +155,7 @@ def create_action():
     if dbm.return_story(new_title) == None:
         dbm.create_story(new_title, new_content, session['username'])
         flash('Story creation successful!')
+        return redirect(url_for('home'))
 
     # else flash user and send to create
     else:
@@ -127,12 +164,22 @@ def create_action():
 
 @app.route('/add')
 def add():
+    '''
+    renders add to story page
+    '''
     if not 'username' in session:
         return kick_out_user_not_signed_in()
     return render_template('add.html')
 
 @app.route('/add_action')
 def add_action():
+    '''
+    takes user input from add to story page and...
+    - redirects to a random story
+        - if the user has contributed to the chosen story, they go to the view page
+        - else they go to the edit page
+    - redirects to search page with the user query, which then displays search results
+    '''
     if not 'username' in session:
         return kick_out_user_not_signed_in()
     query = request.args['query']
@@ -154,6 +201,11 @@ def add_action():
 
 @app.route('/search/<user_query>')
 def search(user_query):
+    '''
+    searches for story based on query
+    if query isn't found, flashes message and redirects user to add to story page
+    else populates search page with search results
+    '''
     if not 'username' in session:
         return kick_out_user_not_signed_in()
     search_results = dbm.search_story(user_query)
@@ -165,6 +217,11 @@ def search(user_query):
 
 @app.route('/search_action', methods=["POST"])
 def search_action():
+    '''
+    takes user input from search page and:
+    - views clicked story if user has contributed
+    - otherwise, redirects user to edit page for the story
+    '''
     if not 'username' in session:
         return kick_out_user_not_signed_in()
     title_clicked = request.form['result']
@@ -175,6 +232,9 @@ def search_action():
 
 @app.route('/edit/<title>')
 def edit(title):
+    '''
+    renders edit page with last_edit and title of story
+    '''
     if not 'username' in session:
         return kick_out_user_not_signed_in()
     story_tuple = dbm.return_story(title)
