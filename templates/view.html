@@ -4,6 +4,11 @@
 
 {% block content %}
 
+{% set msgs = get_flashed_messages() %}
+{% for msg in msgs %}
+<p>{{ msg }}</p>
+{% endfor %}
+
 <h2>{{ title }}</h2>
 
 {% for paragraph in content %}
