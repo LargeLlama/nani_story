@@ -1,3 +1,6 @@
+joanC -- 2018-10-22 23:15
+- modified app.py to push people back to landing when trying to access pages they shouldn't
+
 joanC -- 2018-10-22 23:00
 - complete overhault of app.py
 	- old app.py used too much render_template and not enough redirect
