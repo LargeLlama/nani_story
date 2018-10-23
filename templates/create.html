@@ -10,14 +10,16 @@
 <p>{{ msg }}</p>
 {% endfor %}
 
-<br>
-
-<form action="/create" method="POST">
+<form action="/create_action" method="POST">
     <label for="title">Title: </label>
     <input type="text" name="title" placeholder="Enter title">
+    &nbsp;
+    <input type="submit" name="check_title" value="Check title">
+    <br>
+    <small>Click this button before writing anything but your title because this will delete everything you've written</small>
     <br>
     <br>
-    <textarea rows="10" cols="70" name="new_content">{{ old_value }}</textarea>
+    <textarea rows="10" cols="70" name="new_content"></textarea>
     <br>
     <input type="submit" name="submit" value="Create story!">
 </form>

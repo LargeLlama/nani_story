@@ -6,19 +6,22 @@
 
 <br>
 
-<form action="/search">
+<form action="/add_action">
     <input type="text" name="query" placeholder="Search for a story" value="{{ query }}">
     <input type="submit" name="submit" value="Search">
+    <br>
+    <br>
+    <input type="submit" name="submit" value="Random Story">
 </form>
 
-<!-- {% set msgs = get_flashed_messages() %}
+{% set msgs = get_flashed_messages() %}
 {% for msg in msgs %}
 <p>{{ msg }}</p>
-{% endfor %} -->
+{% endfor %}
 
 <center>
   <h2>Search results for {{ query }}:</h2>
-  <form action="/edit" method="POST">
+  <form action="/search_action" method="POST">
   {% for result in results %}
     <input type="submit" name="result" value="{{ result }}">
     <br>

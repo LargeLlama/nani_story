@@ -6,6 +6,8 @@
 
 <h2>{{ title }}</h2>
 
-<p>{{ content }}</p>
+{% for paragraph in content %}
+<p>{{ paragraph }}</p>
+{% endfor %}
 
 {% endblock %}
