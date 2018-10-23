@@ -242,6 +242,9 @@ def edit(title):
 
 @app.route('/edit_action', methods=["POST"])
 def edit_action():
+    '''
+    
+    '''
     if not 'username' in session:
         return kick_out_user_not_signed_in()
     story_title = request.form['title']
