@@ -33,7 +33,7 @@ def create_story(title, content, user):
         db.close()
         return False
 
-    command_tuple = (title,'<p>' + content + '</p>',content)
+    command_tuple = (title,content,content)
     c.execute('INSERT INTO stories VALUES(?,?,?)',command_tuple)
     command_tuple = (user,title)
     c.execute('INSERT INTO story_edits VALUES(?,?)',command_tuple)
@@ -99,7 +99,7 @@ def add_to_story(title, content, user):
     c.execute('SELECT * FROM stories WHERE title = (?)', select_tuple)
 
     for entry in c:
-        new_story = entry[1] + "<p>" + content + "</p>"
+        new_story = entry[1] + '\n' + content
         add_tuple = (new_story, content, title)
         c.execute('UPDATE stories SET story = (?), last_edit = (?) WHERE title = (?)', add_tuple)
         user_tuple = (user, title)
@@ -121,18 +121,18 @@ def random_story():
     # get the number of rows of the table
     c.execute('SELECT count(*) FROM stories')
     for entry in c:
-      count = random.randint(0,entry[0])
-
-    # if there's nothing in the db
-    if count == 0:
-      return story
+        # if there's nothing in the db
+        if entry[0] == 0:
+            return story
+        count = random.randint(0,entry[0] - 1)
 
     c.execute('SELECT * FROM stories')
     for entry in c:
-      if current_count == count:
-        story = entry
-        break
-      current_count+=1
+        #print('entry: {} current_count: {}'.format(entry,current_count))
+        if current_count == count:
+            story = entry
+            break
+        current_count+=1
 
     return story
 
@@ -211,16 +211,16 @@ def search_story(title):
 
 if __name__ == '__main__':
     #create_db()
-    print('creating soojinchoi: {}'.format(create_story("soojinchoi","soojinchoi",'j')))
-    print('creating soojin2: {}'.format(create_story("soojin2","story time",'j')))
-    print('creating soojin3: {}'.format(create_story("soojin3","adios amigos",'j')))
-    add_to_story("soojinchoi"," blah blah blah",'j')
-    print('registering j: {}'.format(register('j', 'k')))
-    print('authenticating soojin: {}'.format(auth_user('soojinchoi', 'soojinchoi')))
-    print('authenticating j: {}'.format(auth_user('j', 'k')))
-    print('return_story: {}'.format(return_story('soojinchoi')))
-    print('returning a sample search: {}'.format(search_story('soojin')))
-    print('returning edited stories by j: {}'.format(edited_stories('j')))
-    print('edited_or_not by j:{}'.format(edited_or_not('soojinchoi','j')))
+    # print('creating soojinchoi: {}'.format(create_story("soojinchoi","soojinchoi",'j')))
+    # print('creating soojin2: {}'.format(create_story("soojin2","story time",'j')))
+    # print('creating soojin3: {}'.format(create_story("soojin3","adios amigos",'j')))
+    # add_to_story("soojinchoi"," blah blah blah",'j')
+    # print('registering j: {}'.format(register('j', 'k')))
+    # print('authenticating soojin: {}'.format(auth_user('soojinchoi', 'soojinchoi')))
+    # print('authenticating j: {}'.format(auth_user('j', 'k')))
+    # print('return_story: {}'.format(return_story('soojinchoi')))
+    # print('returning a sample search: {}'.format(search_story('soojin')))
+    # print('returning edited stories by j: {}'.format(edited_stories('j')))
+    # print('edited_or_not by j:{}'.format(edited_or_not('soojinchoi','j')))
     for i in range(5):
         print('Printing random story {}: {}'.format(i,random_story()))
