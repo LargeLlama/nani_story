@@ -30,7 +30,7 @@ def authenticate():
     # if either is blank, redirect them back to landing
     if (username == '' or password == ''):
         flash('Invalid username or password!')
-        return redirect(url_for('root_redirect'))
+
 
     # if they're trying to log in
     if (action == 'Login'):
@@ -71,18 +71,19 @@ def logout():
 @app.route('/home')
 def home():
     if not 'username' in session:
-        flash('Please sign in or create an account first!')
-        return redirect(url_for('root_redirect'))
+        return kick_out_user_not_signed_in()
     return render_template('home.html', username=session['username'])
 
 # does actions for form(s) in /home
 @app.route('/home_action', methods=['POST'])
 def home_action():
+    if not 'username' in session:
+        return kick_out_user_not_signed_in()
     # stores action user has clicked on
     action = request.form['action']
 
     if (action == 'Create a story'):
-        return redirect(url_for('create'))
+        return redirect(url_for('create', title="None"))
 
     elif (action == 'Add to a story'):
         return redirect(url_for('add'))
@@ -90,16 +91,18 @@ def home_action():
     elif (action == "View stories you've edited"):
         return redirect(url_for('my_stories'))
 
-@app.route('/create', methods=["GET", "POST"])
-def create():
+@app.route('/create/<title>', methods=["GET", "POST"])
+def create(title):
     if not 'username' in session:
-        flash('Please sign in or create an account first!')
-        return redirect(url_for('root_redirect'))
-    return render_template('create.html')
+        return kick_out_user_not_signed_in()
+    if (title == 'None'):
+        title = ''
+    return render_template('create.html', title=title)
 
 @app.route('/create_action', methods=["POST"])
 def create_action():
-
+    if not 'username' in session:
+        return kick_out_user_not_signed_in()
     # get input
     new_title = request.form['title']
     new_content = request.form['new_content']
@@ -110,13 +113,13 @@ def create_action():
             flash('Story name not taken!')
         else:
             flash('Story name already taken!')
-        return redirect(url_for('create'))
+        return redirect(url_for('create', title=new_title))
 
     # if story doesn't exist, create it
     if dbm.return_story(new_title) == None:
         dbm.create_story(new_title, new_content, session['username'])
         flash('Story creation successful!')
-        return redirect(url_for('root_redirect'))
+
     # else flash user and send to create
     else:
         flash('Story name already taken!')
@@ -125,12 +128,13 @@ def create_action():
 @app.route('/add')
 def add():
     if not 'username' in session:
-        flash('Please sign in or create an account first!')
-        return redirect(url_for('root_redirect'))
+        return kick_out_user_not_signed_in()
     return render_template('add.html')
 
 @app.route('/add_action')
 def add_action():
+    if not 'username' in session:
+        return kick_out_user_not_signed_in()
     query = request.args['query']
     print('query: {}'.format(query))
     action = request.args['submit']
@@ -151,8 +155,7 @@ def add_action():
 @app.route('/search/<user_query>')
 def search(user_query):
     if not 'username' in session:
-        flash('Please sign in or create an account first!')
-        return redirect(url_for('root_redirect'))
+        return kick_out_user_not_signed_in()
     search_results = dbm.search_story(user_query)
     if (len(search_results) == 0):
         flash('We found no stories that match your query :(')
@@ -162,6 +165,8 @@ def search(user_query):
 
 @app.route('/search_action', methods=["POST"])
 def search_action():
+    if not 'username' in session:
+        return kick_out_user_not_signed_in()
     title_clicked = request.form['result']
     if (dbm.edited_or_not(title_clicked, session['username'])):
         return redirect(url_for('view', title=title_clicked))
@@ -171,13 +176,14 @@ def search_action():
 @app.route('/edit/<title>')
 def edit(title):
     if not 'username' in session:
-        flash('Please sign in or create an account first!')
-        return redirect(url_for('root_redirect'))
+        return kick_out_user_not_signed_in()
     story_tuple = dbm.return_story(title)
     return render_template('edit.html', title=story_tuple[0], last_content=story_tuple[2])
 
 @app.route('/edit_action', methods=["POST"])
 def edit_action():
+    if not 'username' in session:
+        return kick_out_user_not_signed_in()
     story_title = request.form['title']
     new_content = request.form['new_content']
 
@@ -189,26 +195,30 @@ def edit_action():
 @app.route('/my_stories')
 def my_stories():
     if not 'username' in session:
-        flash('Please sign in or create an account first!')
-        return redirect(url_for('root_redirect'))
+        return kick_out_user_not_signed_in()
     my_story_list = dbm.edited_stories(session['username'])
     return render_template('my_stories.html', results=my_story_list)
 
 @app.route('/my_stories_action', methods=["POST"])
 def my_stores_action():
+    if not 'username' in session:
+        return kick_out_user_not_signed_in()
     story_title = request.form['result']
     return redirect(url_for('view', title=story_title))
 
 @app.route('/view/<title>')
 def view(title):
     if not 'username' in session:
-        flash('Please sign in or create an account first!')
-        return redirect(url_for('root_redirect'))
+        return kick_out_user_not_signed_in()
     if not title in dbm.edited_stories(session['username']):
         flash('You can\'t access that page!')
-        return redirect(url_for('root_redirect'))
+
     story_tuple = dbm.return_story(title)
     return render_template('view.html', title=story_tuple[0], content=story_tuple[1].split('\n'))
+
+def kick_out_user_not_signed_in():
+    flash('Please sign in or create an account first!')
+    return redirect(url_for('root_redirect'))
 
 if __name__ == '__main__':
     app.debug = True
