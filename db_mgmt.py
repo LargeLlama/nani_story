@@ -209,6 +209,11 @@ def search_story(title):
     db.close()
     return list_stories
 
+def main():
+    create_db()
+    print('registering Jesus: {}'.format(register('Jesus', 'Jesus')))
+    print('creating help me: {}'.format(create_story("help me","peanut butter in roof of mouth help",'Jesus')))
+
 if __name__ == '__main__':
     #create_db()
     # print('creating soojinchoi: {}'.format(create_story("soojinchoi","soojinchoi",'j')))
@@ -222,5 +227,6 @@ if __name__ == '__main__':
     # print('returning a sample search: {}'.format(search_story('soojin')))
     # print('returning edited stories by j: {}'.format(edited_stories('j')))
     # print('edited_or_not by j:{}'.format(edited_or_not('soojinchoi','j')))
-    for i in range(5):
-        print('Printing random story {}: {}'.format(i,random_story()))
+    # for i in range(5):
+    #     print('Printing random story {}: {}'.format(i,random_story()))
+    main()
