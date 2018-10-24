@@ -1,3 +1,9 @@
+raunakC soojinC joanC antonD -- 2018-10-24 14:00
+- BUG: No create_account protocol
+- BUG: Does not check story title when creating story
+- BUG: Story creation page is confusing
+- BUG: Blank story title checking
+
 raunakC -- 2018-10-23 14:00
 - Modded readme
 
