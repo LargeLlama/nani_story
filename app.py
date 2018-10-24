@@ -41,7 +41,7 @@ def authenticate():
     # if either is blank, redirect them back to landing
     if (username == '' or password == ''):
         flash('Invalid username or password!')
-        return redirect(url_for())
+        return redirect(url_for('root_redirect'))
 
     # if they're trying to log in
     if (action == 'Login'):
@@ -243,7 +243,7 @@ def edit(title):
 @app.route('/edit_action', methods=["POST"])
 def edit_action():
     '''
-    
+
     '''
     if not 'username' in session:
         return kick_out_user_not_signed_in()
