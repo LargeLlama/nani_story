@@ -1,4 +1,7 @@
-joanC -- 2019-10-23 14:00
+raunakC -- 2018-10-23 14:00
+- Modded readme
+
+joanC -- 2018-10-23 14:00
 - started to add docstrings to app.py
 - fixed bug on create story button
 
