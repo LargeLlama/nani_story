@@ -60,17 +60,36 @@ def authenticate():
 
     # if they want to create an account
     elif (action == 'Create Account'):
-        success = dbm.register(username, password)
+        return redirect(url_for('create_account'))
 
-        # if account creation successful
-        if success:
-            # store username in cookies and send them home
-            session['username'] = username
-            return redirect(url_for('home'))
-        # otherwise flash them and send them back to landing
-        else:
-            flash('Username taken!')
-            return redirect(url_for('landing'))
+@app.route('/create_account')
+def create_account():
+    return render_template('create_account.html')
+
+@app.route('/create_account_action')
+def create_account_action():
+    username = request.form('username')
+    password = request.form('password')
+    password_check = request.form('password_check')
+
+    if ' ' in username or ' ' in password or ' ' in password_check:
+        flash('Invalid username or password!')
+        return redirect(url_for('create_account'))
+
+    if password != password_check:
+        flash('Passwords don\'t match!')
+        return redirect(url_for('create_account'))
+
+    success = dbm.register(username, password)
+
+    # if account creation successful
+    if success:
+        # store username in cookies and send them home
+        return redirect(url_for('landing'))
+    # otherwise flash them and send them back to landing
+    else:
+        flash('Username taken!')
+        return redirect(url_for('create_account'))
 
 @app.route('/logout')
 def logout():
@@ -154,7 +173,7 @@ def create_action():
     # check if verify title
     if ('check_title' in request.form):
         if (dbm.return_story(new_title) == None):
-            flash(' &#2705;')
+            flash(' ✔')
         else:
             flash('Story name already taken!')
         return redirect(url_for('create', title=new_title))
@@ -179,7 +198,7 @@ def create_action():
     # else flash user and send to create
     else:
         flash('Story name already taken!')
-        return redirect(url_for('create'), title='None')
+        return redirect(url_for('create', title='None'))
 
 @app.route('/add')
 def add():
