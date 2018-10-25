@@ -15,7 +15,7 @@
     <input type="text" name="title" placeholder="Enter title" value="{{ title }}">
     &nbsp;
     <input type="submit" name="check_title" value="Check title">
-    <label>&nbsp;{% for msg in msgs %}{{ msg }}{% endfor %}</title>
+    <label>&nbsp;{% for msg in msgs %}{{ msg|safe }}{% endfor %}</title>
     <br>
     <small>Click this button before writing anything but your title because this will delete everything you've written</small>
     <br>

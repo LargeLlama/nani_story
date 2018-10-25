@@ -9,19 +9,20 @@
         <center>
             <h1>StoriBois</h1>
             <h3>Create Account</h2>
-            <i>*No spaces please!*</i>
+            <i><small>*No spaces please!*</small><br><small>Max username/password length: 25 characters</small></i>
             {% set msgs = get_flashed_messages() %}
             {% for msg in msgs %}
             <p>{{ msg }}</p>
             {% endfor %}
             <form action="/create_account_action" method="POST">
                 <label for="username">Username: </label>
-                <input type="text" name="username">
+                <input type="text" name="username" maxlength="25">
                 <br>
                 <label for="password">Password: </label>
-                <input type="password" name="password">
+                <input type="password" name="password" maxlength="25">
+                <br>
                 <label for="password_check">Retype password: </label>
-                <input type="password" name="password_check">
+                <input type="password" name="password_check" maxlength="25">
                 <br>
                 <input type="submit" name="action" value="Create Account">
             </form>

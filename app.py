@@ -38,13 +38,12 @@ def authenticate():
     password = request.form['password']
     action = request.form['action']
 
-    # if either input is blank, redirect them back to landing
-    if (username == '' or password == ''):
-        flash('Invalid username or password!')
-        return redirect(url_for('root_redirect'))
-
     # if they're trying to log in
     if (action == 'Login'):
+        # if either input is blank, redirect them back to landing
+        if (username == '' or password == ''):
+            flash('Invalid username or password!')
+            return redirect(url_for('root_redirect'))
         # stores success value of auth fxn in dbm
         success = dbm.auth_user(username, password)
 
@@ -66,13 +65,13 @@ def authenticate():
 def create_account():
     return render_template('create_account.html')
 
-@app.route('/create_account_action')
+@app.route('/create_account_action', methods=["POST"])
 def create_account_action():
-    username = request.form('username')
-    password = request.form('password')
-    password_check = request.form('password_check')
+    username = request.form['username']
+    password = request.form['password']
+    password_check = request.form['password_check']
 
-    if ' ' in username or ' ' in password or ' ' in password_check:
+    if username == '' or password == '' or password_check == '' or ' ' in username or ' ' in password or ' ' in password_check:
         flash('Invalid username or password!')
         return redirect(url_for('create_account'))
 
@@ -173,7 +172,7 @@ def create_action():
     # check if verify title
     if ('check_title' in request.form):
         if (dbm.return_story(new_title) == None):
-            flash(' ✔')
+            flash(' &#10004;')
         else:
             flash('Story name already taken!')
         return redirect(url_for('create', title=new_title))
