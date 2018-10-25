@@ -235,6 +235,11 @@ def add_action():
             else:
                 return redirect(url_for('edit', title=story))
     elif (action == 'Search'):
+        print('QUERY: |{}|'.format(query))
+        print('LEN OF QUERY: {}'.format(len(query)))
+        if (len(query) == 0 or len(query.split()) == 0):
+            flash('Can\'t leave search query blank!')
+            return redirect(url_for('add'))
         return redirect(url_for('search', user_query=query))
 
 @app.route('/search/<user_query>')
