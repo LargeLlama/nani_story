@@ -84,6 +84,7 @@ def create_account_action():
     # if account creation successful
     if success:
         # store username in cookies and send them home
+        flash('Account creation successful!')
         return redirect(url_for('landing'))
     # otherwise flash them and send them back to landing
     else:
@@ -288,6 +289,10 @@ def edit_action():
         return kick_out_user_not_signed_in()
     story_title = request.form['title']
     new_content = request.form['new_content']
+
+    if (len(new_content) == 0 or len(new_content.split()) == 0):
+        flash('Can\'t leave content blank!')
+        return redirect(url_for('edit', title=story_title))
 
     dbm.add_to_story(story_title, new_content, session['username'])
 
