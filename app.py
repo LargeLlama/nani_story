@@ -193,7 +193,7 @@ def create_action():
         # else create story
         dbm.create_story(new_title, new_content, session['username'])
         flash('Story creation successful!')
-        return redirect(url_for('home'))
+        return redirect(url_for('view', title=new_title))
 
     # else flash user and send to create
     else:
@@ -225,11 +225,12 @@ def add_action():
     action = request.args['submit']
 
     if (action == 'Random Story'):
-        story = dbm.random_story()[0]
+        story = dbm.random_story()
         if (story == None):
             flash('No stories in the database!')
             return redirect(url_for('add'))
         else:
+            story = story[0]
             if (dbm.edited_or_not(story, session['username'])):
                 return redirect(url_for('view', title=story))
             else:
