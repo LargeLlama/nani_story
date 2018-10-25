@@ -6,20 +6,21 @@
 
 
 {% set msgs = get_flashed_messages() %}
-{% for msg in msgs %}
+<!-- {% for msg in msgs %}
 <p>{{ msg }}</p>
-{% endfor %}
+{% endfor %} -->
 
 <form action="/create_action" method="POST">
     <label for="title">Title: </label>
-    <input type="text" name="title" placeholder="Enter title">
+    <input type="text" name="title" placeholder="Enter title" value="{{ title }}">
     &nbsp;
     <input type="submit" name="check_title" value="Check title">
+    <label>&nbsp;{% for msg in msgs %}{{ msg }}{% endfor %}</title>
     <br>
     <small>Click this button before writing anything but your title because this will delete everything you've written</small>
     <br>
     <br>
-    <textarea rows="10" cols="70" name="new_content"></textarea>
+    <textarea rows="10" cols="70" name="new_content" maxlength="1000"></textarea>
     <br>
     <input type="submit" name="submit" value="Create story!">
 </form>

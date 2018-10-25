@@ -38,7 +38,7 @@ def authenticate():
     password = request.form['password']
     action = request.form['action']
 
-    # if either is blank, redirect them back to landing
+    # if either input is blank, redirect them back to landing
     if (username == '' or password == ''):
         flash('Invalid username or password!')
         return redirect(url_for('root_redirect'))
@@ -116,7 +116,8 @@ def home_action():
     elif (action == "View stories you've edited"):
         return redirect(url_for('my_stories'))
 
-@app.route('/create/<title>', methods=["GET", "POST"])
+# uses dynamic routing so we don't have to generate a new route for every possible title
+@app.route('/create/<title>')
 def create(title):
     '''
     renders create story page
@@ -126,7 +127,10 @@ def create(title):
         return kick_out_user_not_signed_in()
     print('title user has input\'d: {}'.format(title))
     if (title == 'None'):
+        print('TITLE IS BLANK')
         title = ''
+    else:
+        print('TITLE IS {}'.format(title))
     return render_template('create.html', title=title)
 
 @app.route('/create_action', methods=["POST"])
@@ -143,16 +147,31 @@ def create_action():
     new_title = request.form['title']
     new_content = request.form['new_content']
 
+    if (new_title == '' or new_title.strip() == ''):
+        flash('Invalid title!')
+        return redirect(url_for('create', title='None'))
+
     # check if verify title
     if ('check_title' in request.form):
         if (dbm.return_story(new_title) == None):
-            flash('Story name not taken!')
+            flash(' &#2705;')
         else:
             flash('Story name already taken!')
         return redirect(url_for('create', title=new_title))
 
-    # if story doesn't exist, create it
+    # if story doesn't exist...
     if dbm.return_story(new_title) == None:
+        # if new_content is blank
+        if (new_content == ''):
+            flash('Can\'t leave content blank!')
+            return redirect(url_for('create', title=new_title))
+
+        # if new_content only has spaces, \n, etc.
+        if (new_content.strip() == ''):
+            flash('Can\'t populate content with blanks!')
+            return redirect(url_for('create', title=new_title))
+
+        # else create story
         dbm.create_story(new_title, new_content, session['username'])
         flash('Story creation successful!')
         return redirect(url_for('home'))
@@ -160,7 +179,7 @@ def create_action():
     # else flash user and send to create
     else:
         flash('Story name already taken!')
-        return redirect(url_for('create'))
+        return redirect(url_for('create'), title='None')
 
 @app.route('/add')
 def add():
@@ -243,7 +262,9 @@ def edit(title):
 @app.route('/edit_action', methods=["POST"])
 def edit_action():
     '''
-
+    takes user input from edit page and...
+    - adds new content to story
+    then redirects to the view page for the story
     '''
     if not 'username' in session:
         return kick_out_user_not_signed_in()
@@ -257,20 +278,30 @@ def edit_action():
 
 @app.route('/my_stories')
 def my_stories():
+    '''
+    renders a list of stories the user has contributed to in my_stories page
+    '''
     if not 'username' in session:
         return kick_out_user_not_signed_in()
     my_story_list = dbm.edited_stories(session['username'])
     return render_template('my_stories.html', results=my_story_list)
 
 @app.route('/my_stories_action', methods=["POST"])
-def my_stores_action():
+def my_stories_action():
+    '''
+    redirects user to appropriate story page when they click on a story in
+    '''
     if not 'username' in session:
         return kick_out_user_not_signed_in()
     story_title = request.form['result']
     return redirect(url_for('view', title=story_title))
 
+# uses dynamic routing so we don't have to generate a new route for every possible title
 @app.route('/view/<title>')
 def view(title):
+    '''
+    displays story given a title
+    '''
     if not 'username' in session:
         return kick_out_user_not_signed_in()
     if not title in dbm.edited_stories(session['username']):
@@ -280,6 +311,9 @@ def view(title):
     return render_template('view.html', title=story_tuple[0], content=story_tuple[1].split('\n'))
 
 def kick_out_user_not_signed_in():
+    '''
+    kicks out users if they're not logged in
+    '''
     flash('Please sign in or create an account first!')
     return redirect(url_for('root_redirect'))
 
