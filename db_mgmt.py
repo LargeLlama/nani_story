@@ -203,7 +203,7 @@ def search_story(title):
     c.execute('SELECT title FROM stories')
 
     for entry in c:
-        if (entry[0].find(title) != -1):
+        if (entry[0].lower().find(title.lower()) != -1):
             list_stories.append(entry[0])
 
     db.close()
