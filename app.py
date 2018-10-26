@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, session, url_for, redirect, flash
 import os
-import db_mgmt as dbm
+from util import db_mgmt as dbm
 app = Flask(__name__) #create instance of class Flask
 
 app.secret_key = os.urandom(32)

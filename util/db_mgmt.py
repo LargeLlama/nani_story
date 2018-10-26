@@ -211,22 +211,10 @@ def search_story(title):
 
 def main():
     create_db()
-    print('registering Jesus: {}'.format(register('Jesus', 'Jesus')))
+    register('user', 'password')
+    register('j', 'k')
+    register('Jesus', 'bread')
     print('creating help me: {}'.format(create_story("help me","peanut butter in roof of mouth help",'Jesus')))
 
 if __name__ == '__main__':
-    #create_db()
-    # print('creating soojinchoi: {}'.format(create_story("soojinchoi","soojinchoi",'j')))
-    # print('creating soojin2: {}'.format(create_story("soojin2","story time",'j')))
-    # print('creating soojin3: {}'.format(create_story("soojin3","adios amigos",'j')))
-    # add_to_story("soojinchoi"," blah blah blah",'j')
-    # print('registering j: {}'.format(register('j', 'k')))
-    # print('authenticating soojin: {}'.format(auth_user('soojinchoi', 'soojinchoi')))
-    # print('authenticating j: {}'.format(auth_user('j', 'k')))
-    # print('return_story: {}'.format(return_story('soojinchoi')))
-    # print('returning a sample search: {}'.format(search_story('soojin')))
-    # print('returning edited stories by j: {}'.format(edited_stories('j')))
-    # print('edited_or_not by j:{}'.format(edited_or_not('soojinchoi','j')))
-    # for i in range(5):
-    #     print('Printing random story {}: {}'.format(i,random_story()))
     main()
