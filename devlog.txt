@@ -1,3 +1,9 @@
+joanC -- 2018-10-26 11:51
+- Added required attribute to some inputs
+
+raunakC -- 2018-10-26 11:23
+- Made search not case sensitive
+
 joanC soojinC -- 2018-10-25 13:59
 - Fixed bugs from 2018-10-24
 - Added routes for account_creation page
