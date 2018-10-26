@@ -16,13 +16,13 @@
             {% endfor %}
             <form action="/create_account_action" method="POST">
                 <label for="username">Username: </label>
-                <input type="text" name="username" maxlength="25">
+                <input type="text" name="username" maxlength="25" required>
                 <br>
                 <label for="password">Password: </label>
-                <input type="password" name="password" maxlength="25">
+                <input type="password" name="password" maxlength="25" required>
                 <br>
                 <label for="password_check">Retype password: </label>
-                <input type="password" name="password_check" maxlength="25">
+                <input type="password" name="password_check" maxlength="25" required>
                 <br>
                 <input type="submit" name="action" value="Create Account">
             </form>
